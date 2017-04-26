@@ -6,7 +6,7 @@ import tensorflow as tf
 import numpy as np
 import time
 
-dataset, samplerate = get_data_from_location(FLAGS.data_dir)
+dataset, samplerate = get_data_from_location(FLAGS.data_dir, FLAGS.amplitude)
 
 # this is for neural network
 model = Model(FLAGS.learning_rate, FLAGS.num_layers, FLAGS.sound_batch_size, FLAGS.size)
@@ -27,7 +27,7 @@ def train():
         last_time = time.time()
         init_value = np.zeros((1, FLAGS.num_layers * 2 * FLAGS.size))
     
-        for x in xrange(0, dataset.shape[0], FLAGS.sound_batch_size):
+        for x in xrange(0, dataset.shape[0] - (2 * FLAGS.sound_batch_size), FLAGS.sound_batch_size):
         
             batch = np.zeros((1, 1, FLAGS.sound_batch_size))
             batch_y = np.zeros((1, 1, FLAGS.sound_batch_size))
@@ -36,14 +36,13 @@ def train():
             batch_y[0, 0, :] = dataset[x + FLAGS.sound_batch_size: x + (2 * FLAGS.sound_batch_size)]
         
             _, loss = sess.run([model.optimizer, model.cost], feed_dict={model.X: batch, model.Y: batch_y,
-                                                                         model.back_hidden_layer: init_value, model.forward_hidden_layer: init_value,})
+                                                                         model.back_hidden_layer: init_value, model.forward_hidden_layer: init_value})
 
-        diff = time.time() - last_time
-        print "batch: " + str(i + 1) + ", loss: " + str(np.mean(loss)) + ", speed: " + str(diff) + " s / epoch"
+        print "batch: " + str(i + 1) + ", loss: " + str(np.mean(loss)) + ", speed: " + str(time.time() - last_time) + " s / epoch"
     
         if (i + 1) % FLAGS.checkpoint_epoch == 0:
             saver.save(sess, FLAGS.train_dir + "model.ckpt")
-            generategraph(dataset, model, sess)
+            generategraph(dataset, model, sess, samplerate, FLAGS.sound_batch_size, checkpoint = True)
 
 def main():
     if FLAGS.decode:

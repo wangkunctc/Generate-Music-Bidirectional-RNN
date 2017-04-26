@@ -1,13 +1,14 @@
 import tensorflow as tf
 
-tf.app.flags.DEFINE_float("learning_rate", 0.001, "Learning rate.")
+tf.app.flags.DEFINE_integer("amplitude", 40, "increase the wave by this factor")
+tf.app.flags.DEFINE_float("learning_rate", 0.00001, "Learning rate.")
 tf.app.flags.DEFINE_integer("sound_batch_size", 1000, "Sound batch size to use during training.")
-tf.app.flags.DEFINE_integer("checkpoint_epoch", 100, "Checkpoint to save and testing")
+tf.app.flags.DEFINE_integer("checkpoint_epoch", 10, "Checkpoint to save and testing")
 tf.app.flags.DEFINE_integer("max_epoch", 1000, "Limit on the size of training data (0: no limit).")
-tf.app.flags.DEFINE_integer("size", 32, "Size of each model layer.")
+tf.app.flags.DEFINE_integer("size", 256, "Size of each model layer.")
 tf.app.flags.DEFINE_integer("num_layers", 2, "Number of layers in the model.")
-tf.app.flags.DEFINE_string("train_dir", "/home/huseinzol05/AI/music/", "Training directory.")
-tf.app.flags.DEFINE_string("data_dir", "/home/huseinzol05/AI/sound/data/", "data location.")
+tf.app.flags.DEFINE_string("train_dir", "/home/husein/Generate-Music-Bidirectional-RNN/", "Training directory.")
+tf.app.flags.DEFINE_string("data_dir", "/home/husein/Generate-Music-Recurrent-Neural-Network/data/", "data location.")
 
 tf.app.flags.DEFINE_boolean("decode", False, "Set to True for interactive decoding.")
 

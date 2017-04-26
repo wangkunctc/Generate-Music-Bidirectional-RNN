@@ -2,7 +2,7 @@ import numpy as np
 import soundfile as sf
 import os
 
-def get_data_from_location(location):
+def get_data_from_location(location, amplitude):
     list_data = os.listdir(location)
     
     if len(list_data) == 0:
@@ -38,4 +38,4 @@ def get_data_from_location(location):
         
         data = np.append(data, sample_data, axis = 0)
     
-    return data, samplerate
+    return data * amplitude, samplerate

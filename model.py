@@ -37,7 +37,7 @@ class Model:
         # y = Wx + B
         self.logits = (tf.matmul(outputs_reshaped, self.rnn_W) + self.rnn_B)
         
-        self.cost = tf.abs(y_batch_long - self.logits)
+        self.cost = tf.square(y_batch_long - self.logits)
         
         self.optimizer = tf.train.AdamOptimizer(learning_rate).minimize(self.cost)
 
@@ -50,8 +50,8 @@ class Model:
             init_value = self.net_last_state
         
         # we want to get the constant in our output layer, same size as dimension input
-        probs, next_lstm_state = sess.run([self.logits, self.last_state], feed_dict={self.X:[x], self.hidden_layer:[init_value]})
+        probs, next_lstm_state = sess.run([self.logits, self.last_state], feed_dict={self.X:[x], self.back_hidden_layer:[init_value], self.forward_hidden_layer:[init_value]})
 
-        self.net_last_state = next_lstm_state[0]
+        self.net_last_state = next_lstm_state[0][0]
 
         return probs
